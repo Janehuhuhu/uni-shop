@@ -1,7 +1,12 @@
 <template>
 	<view>
-		<view @click="gotoDetail(item)" v-for="(item, index) in goodsList" :key="index">
-			<my-goods :goods="item"></my-goods>
+		<block v-if="goodsList.length">
+			<view @click="gotoDetail(item)" v-for="(item, index) in goodsList" :key="index">
+				<my-goods :goods="item"></my-goods>
+			</view>
+		</block>
+		<view v-else class="none-goods">
+			<text>没有更多了...</text>
 		</view>
 	</view>
 </template>
@@ -78,5 +83,10 @@
 </script>
 
 <style>
-
+.none-goods {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+}
 </style>
