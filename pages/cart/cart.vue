@@ -5,9 +5,6 @@
 			<uni-icons type="shop" :size="18"></uni-icons>
 			<text class="cart-title-text">购物车</text>
 		</view>
-		<!-- <view v-for="(item, index) in cart" :key="index">
-			<my-goods @numChange="numChangeHandler" @radioChange="radioChangeHandler" :show-radio="true" :show-num="true" :goods="item"></my-goods>
-		</view> -->
 		<uni-swipe-action>
 			<uni-swipe-action-item  v-for="(item, index) in cart" :key="index" :right-options="options" @click="deleteItem(item)">
 				<my-goods @numChange="numChangeHandler" @radioChange="radioChangeHandler" :show-radio="true" :show-num="true" :goods="item"></my-goods>
