@@ -115,7 +115,10 @@
         },
         "uniStatistics" : {
             "enable" : true
-        }
+        },
+		"requiredPrivateInfos": [
+		    "chooseAddress"
+		]
     },
     "mp-alipay" : {
         "usingComponents" : true,

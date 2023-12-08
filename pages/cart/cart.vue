@@ -9,11 +9,9 @@
 			<my-goods @numChange="numChangeHandler" @radioChange="radioChangeHandler" :show-radio="true" :show-num="true" :goods="item"></my-goods>
 		</view> -->
 		<uni-swipe-action>
-			<block v-for="(item, index) in cart" :key="index">
-				<uni-swipe-action-item :options="options" @click="deleteItem(item)">
-					<my-goods @numChange="numChangeHandler" @radioChange="radioChangeHandler" :show-radio="true" :show-num="true" :goods="item"></my-goods>
-				</uni-swipe-action-item>
-			</block>
+			<uni-swipe-action-item  v-for="(item, index) in cart" :key="index" :right-options="options" @click="deleteItem(item)">
+				<my-goods @numChange="numChangeHandler" @radioChange="radioChangeHandler" :show-radio="true" :show-num="true" :goods="item"></my-goods>
+			</uni-swipe-action-item>
 		</uni-swipe-action>
 	</view>
 </template>

@@ -5,22 +5,22 @@
 		</view>
 		<view v-else class="address-info-box">
 			<view class="row1">
-				<view>收货人: xxx </view>
+				<view>收货人: {{address.userName}} </view>
 				<view class="row1-right">
-					<view>电话: 138xxxxxxx</view>
+					<view>电话: {{address.telNumber}}</view>
 					<uni-icons type="arrowright" size="16"></uni-icons>
 				</view>
 			</view>
 			<view class="row2">
 				<view class="row2-left">收货地址: </view>
-				<view class="row2-right">上海市长宁区新泾镇新泾三村9号602室上海市长宁区新泾镇新泾三村9号602室上海市长宁区新泾镇新泾三村9号602室</view>
+				<view class="row2-right">{{addstr}}</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import { mapMutations, mapState } from 'vuex'
+	import { mapMutations, mapState, mapGetters } from 'vuex'
 	
 	export default {
 		name:"my-address",
@@ -30,7 +30,8 @@
 			};
 		},
 		computed: {
-			...mapState('m_user', ['address'])
+			...mapState('m_user', ['address']),
+			...mapGetters('m_user', ['addstr'])
 		},
 		methods: {
 			...mapMutations('m_user', ['updateAddress']),
@@ -63,6 +64,7 @@
 		align-items: center;
 	}
 	.address-info-box {
+		padding: 10px;
 		font-size: 12px;
 		.row1 {
 			display: flex;

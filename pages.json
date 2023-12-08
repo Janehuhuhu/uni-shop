@@ -122,8 +122,5 @@
 				"text": "我的"
 			}
 		]
-	},
-	"requiredPrivateInfos": [
-	    "chooseAddress"
-	  ]
+	}
 }
