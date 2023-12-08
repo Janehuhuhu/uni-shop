@@ -17,8 +17,7 @@ export default {
 	
 	methods: {
 		setBadge() {
-			console.log('sss', this.total)
-			this.total && uni.setTabBarBadge({
+			this.total !== null && uni.setTabBarBadge({
 				index: 2,
 				text: this.total + ''
 			})

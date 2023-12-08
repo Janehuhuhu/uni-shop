@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="cart-container" v-if="cart.length">
 		<my-address></my-address>
 		<view class="cart-title">
 			<uni-icons type="shop" :size="18"></uni-icons>
@@ -10,6 +10,12 @@
 				<my-goods @numChange="numChangeHandler" @radioChange="radioChangeHandler" :show-radio="true" :show-num="true" :goods="item"></my-goods>
 			</uni-swipe-action-item>
 		</uni-swipe-action>
+		<my-settle></my-settle>
+	</view>
+	<!-- 购物车为空时页面 -->
+	<view v-else class="empty-box">
+		<image class="empty-img" src="@/static/空购物车.png"></image>
+		<text class="empty-tip">空空如也~</text>
 	</view>
 </template>
 
@@ -55,6 +61,9 @@ export default {
 </script>
 
 <style lang="scss">
+.cart-container {
+	padding-bottom: 50px;
+}
 .cart-title {
 	display: flex;
 	height: 40px;
@@ -65,6 +74,22 @@ export default {
 	
 	.cart-title-text {
 		margin-left: 10px;
+	}
+}
+.empty-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 150px;
+	
+	.empty-img {
+		width: 90px;
+		height: 90px;
+	}
+	.empty-tip {
+		font-size: 12px;
+		color: gray;
+		margin-top: 15px;
 	}
 }
 </style>

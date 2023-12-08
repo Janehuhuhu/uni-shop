@@ -2,12 +2,12 @@ export default {
 	namespaced: true,
 	
 	state: () => ({
-		address: {}
+		address: JSON.parse(uni.getStorageSync('address') || '{}')
 	}),
 	
 	mutations: {
 		saveToStorage(state) {
-			uni.setStorageSync('user', JSON.stringify(state.address))
+			uni.setStorageSync('address', JSON.stringify(state.address))
 		},
 		updateAddress(state, address) {
 			state.address = address
