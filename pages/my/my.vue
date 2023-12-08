@@ -1,6 +1,6 @@
 <template>
 	<view>
-		我的
+		<my-login></my-login>
 	</view>
 </template>
 

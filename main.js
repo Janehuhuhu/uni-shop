@@ -15,6 +15,14 @@ $http.afterRequest = function(options) {
 	uni.hideLoading()
 }
 
+uni.$showMsg = function(msg) {
+	uni.showToast({
+		title: msg,
+		duration: 1500,
+		icon: 'none'
+	})
+}
+
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
