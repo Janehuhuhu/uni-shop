@@ -23,51 +23,53 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				cateList: [],
-				active: 0,
-				cateLevel2: [],
-				scrollTop: 0,
-				wh: 0,
-			};
-		},
-		onLoad() {
-			const sysInfo = uni.getSystemInfoSync()
-			this.wh = sysInfo.windowHeight - 50
-			this.getCateList()
-		},
-		methods: {
-			async getCateList() {
-				const { data: res } = await uni.$http.get('/api/public/v1/categories')
-				if (res.meta.status !== 200) {
-					return uni.showToast({
-						title: "数据请求失败",
-						duration: 1500,
-						icon: 'none'
-					})
-				}
-				this.cateList = res.message
-				this.cateLevel2 = this.cateList[0].children
-			},
-			activeChanged(i) {
-				this.active = i
-				this.cateLevel2 = this.cateList[i].children
-				this.scrollTop = this.scrollTop === 0 ? 1 : 0
-			},
-			gotoGoodsList(item) {
-				uni.navigateTo({
-					url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
-				})
-			},
-			gotoSearch() {
-				uni.navigateTo({
-					url: '/subpkg/search/search'
+import badgeMix from '@/mixins/tabbar-badge.js'
+export default {
+	mixins: [badgeMix],
+	data() {
+		return {
+			cateList: [],
+			active: 0,
+			cateLevel2: [],
+			scrollTop: 0,
+			wh: 0,
+		};
+	},
+	onLoad() {
+		const sysInfo = uni.getSystemInfoSync()
+		this.wh = sysInfo.windowHeight - 50
+		this.getCateList()
+	},
+	methods: {
+		async getCateList() {
+			const { data: res } = await uni.$http.get('/api/public/v1/categories')
+			if (res.meta.status !== 200) {
+				return uni.showToast({
+					title: "数据请求失败",
+					duration: 1500,
+					icon: 'none'
 				})
 			}
+			this.cateList = res.message
+			this.cateLevel2 = this.cateList[0].children
+		},
+		activeChanged(i) {
+			this.active = i
+			this.cateLevel2 = this.cateList[i].children
+			this.scrollTop = this.scrollTop === 0 ? 1 : 0
+		},
+		gotoGoodsList(item) {
+			uni.navigateTo({
+				url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
+			})
+		},
+		gotoSearch() {
+			uni.navigateTo({
+				url: '/subpkg/search/search'
+			})
 		}
 	}
+}
 </script>
 
 <style lang="scss">

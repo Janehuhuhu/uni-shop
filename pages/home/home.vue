@@ -3,7 +3,7 @@
 		<my-search @click="gotoSearch"></my-search>
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" :circular="true">
 			<swiper-item v-for="(item, index) in swiperList" :key="index">
-				<navigator :url="'/subpkg/goods_detail/goods_detail?goods_id' + item.goods_id" class="swiper-item">
+				<navigator :url="'/subpkg/goods_detail/goods_detail?goods_id=' + item.goods_id" class="swiper-item">
 					<image :src="item.image_src"></image>
 				</navigator>
 			</swiper-item>
@@ -32,72 +32,74 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				swiperList: [],
-				navList: [],
-				floorList: []
-			};
-		},
-		onLoad() {
-			this.getSwiperList()
-			this.getNavList()
-			this.getFloorList()
-		},
-		methods: {
-			async getSwiperList() {
-				const {data: res} = await uni.$http.get('/api/public/v1/home/swiperdata')
-				if (res.meta.status !== 200) {
-					return uni.showToast({
-						title: "数据请求失败",
-						duration: 1500,
-						icon: 'none'
-					})
-				}
-				this.swiperList = res.message
-			},
-			async getNavList() {
-				const {data: res} = await uni.$http.get('/api/public/v1/home/catitems')
-				if (res.meta.status !== 200) {
-					return uni.showToast({
-						title: "数据请求失败",
-						duration: 1500,
-						icon: 'none'
-					})
-				}
-				this.navList = res.message
-			},
-			navClickHandler(item) {
-				if (item.name === '分类') {
-					uni.switchTab({
-						url: '/pages/cate/cate'
-					})
-				}
-			},
-			async getFloorList() {
-				const {data: res} = await uni.$http.get('/api/public/v1/home/floordata')
-				if (res.meta.status !== 200) {
-					return uni.showToast({
-						title: "数据请求失败",
-						duration: 1500,
-						icon: 'none'
-					})
-				}
-				res.message.forEach(item => {
-					item.product_list.forEach(prod => {
-						prod.url = '/subpkg/goods_list/goods_list?' + prod.navigator_url.split('?')[1]
-					})
-				})
-				this.floorList = res.message
-			},
-			gotoSearch() {
-				uni.navigateTo({
-					url: '/subpkg/search/search'
+import badgeMix from '@/mixins/tabbar-badge.js'
+export default {
+	mixins: [badgeMix],
+	data() {
+		return {
+			swiperList: [],
+			navList: [],
+			floorList: []
+		};
+	},
+	onLoad() {
+		this.getSwiperList()
+		this.getNavList()
+		this.getFloorList()
+	},
+	methods: {
+		async getSwiperList() {
+			const {data: res} = await uni.$http.get('/api/public/v1/home/swiperdata')
+			if (res.meta.status !== 200) {
+				return uni.showToast({
+					title: "数据请求失败",
+					duration: 1500,
+					icon: 'none'
 				})
 			}
+			this.swiperList = res.message
+		},
+		async getNavList() {
+			const {data: res} = await uni.$http.get('/api/public/v1/home/catitems')
+			if (res.meta.status !== 200) {
+				return uni.showToast({
+					title: "数据请求失败",
+					duration: 1500,
+					icon: 'none'
+				})
+			}
+			this.navList = res.message
+		},
+		navClickHandler(item) {
+			if (item.name === '分类') {
+				uni.switchTab({
+					url: '/pages/cate/cate'
+				})
+			}
+		},
+		async getFloorList() {
+			const {data: res} = await uni.$http.get('/api/public/v1/home/floordata')
+			if (res.meta.status !== 200) {
+				return uni.showToast({
+					title: "数据请求失败",
+					duration: 1500,
+					icon: 'none'
+				})
+			}
+			res.message.forEach(item => {
+				item.product_list.forEach(prod => {
+					prod.url = '/subpkg/goods_list/goods_list?' + prod.navigator_url.split('?')[1]
+				})
+			})
+			this.floorList = res.message
+		},
+		gotoSearch() {
+			uni.navigateTo({
+				url: '/subpkg/search/search'
+			})
 		}
 	}
+}
 </script>
 
 <style lang="scss">

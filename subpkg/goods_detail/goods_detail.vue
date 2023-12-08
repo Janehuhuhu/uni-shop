@@ -26,65 +26,91 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				goodsInfo: {},
-				options: [{
-					icon: 'shop',
-					text: '店铺'
-				}, {
-					icon: 'cart',
-					text: '购物车',
-					info: 2
-				}],
-				buttonGroup: [{
-				  text: '加入购物车',
-				  backgroundColor: '#ff0000',
-				  color: '#fff'
-				},
-				{
-				  text: '立即购买',
-				  backgroundColor: '#ffa200',
-				  color: '#fff'
-				}]
-			};
-		},
-		onLoad(options) {
-			const id = options.goods_id
-			this.getGoodsDetail(id)
-		},
-		methods: {
-			async getGoodsDetail(goods_id) {
-				const { data: res } = await uni.$http.get('/api/public/v1/goods/detail', { goods_id })
-				if (res.meta.status !== 200) {
-					return uni.showToast({
-						title: "数据请求失败",
-						duration: 1500,
-						icon: 'none'
-					})
-				}
-				res.message.goods_introduce = res.message.goods_introduce.replace(/<img /g, '<img style="display: block;"').replace(/webp/g, 'jpg')
-				this.goodsInfo = res.message
+import { mapMutations, mapGetters } from 'vuex'
+
+export default {
+	data() {
+		return {
+			goodsInfo: {},
+			options: [{
+				icon: 'shop',
+				text: '店铺'
+			}, {
+				icon: 'cart',
+				text: '购物车',
+				info: 0
+			}],
+			buttonGroup: [{
+			  text: '加入购物车',
+			  backgroundColor: '#ff0000',
+			  color: '#fff'
 			},
-			preview(index) {
-				uni.previewImage({
-					current: index,
-					urls: this.goodsInfo.pics.map(x => x.pics_big)
+			{
+			  text: '立即购买',
+			  backgroundColor: '#ffa200',
+			  color: '#fff'
+			}]
+		};
+	},
+	computed: {
+		...mapGetters('m_cart', ['total'])
+	},
+
+	onLoad(options) {
+		const id = options.goods_id
+		this.getGoodsDetail(id)
+	},
+	watch: {
+		total: {
+			handler(newValue) {
+				const res = this.options.find(item => item.text === '购物车')
+				if (res) {
+					res.info = newValue
+				}
+			},
+			immediate: true
+		}
+	},
+	methods: {
+		...mapMutations('m_cart', ['addToCart']),
+		async getGoodsDetail(goods_id) {
+			const { data: res } = await uni.$http.get('/api/public/v1/goods/detail', { goods_id })
+			if (res.meta.status !== 200) {
+				return uni.showToast({
+					title: "数据请求失败",
+					duration: 1500,
+					icon: 'none'
 				})
-			},
-			onClick(e) {
-				if (e.content.text === '购物车') {
-					uni.switchTab({
-						url: '/pages/cart/cart'
-					})
-				}
-			},
-			buttonClick(e) {
-				console.log('e', e)
 			}
+			res.message.goods_introduce = res.message.goods_introduce.replace(/<img /g, '<img style="display: block;"').replace(/webp/g, 'jpg')
+			this.goodsInfo = res.message
+		},
+		preview(index) {
+			uni.previewImage({
+				current: index,
+				urls: this.goodsInfo.pics.map(x => x.pics_big)
+			})
+		},
+		onClick(e) {
+			if (e.content.text === '购物车') {
+				uni.switchTab({
+					url: '/pages/cart/cart'
+				})
+			}
+		},
+		buttonClick(e) {
+			const goods = {
+				goods_id: this.goodsInfo.goods_id,
+				goods_name: this.goodsInfo.goods_name,
+				goods_price: this.goodsInfo.goods_price,
+				goods_count: 1,
+				goods_small_logo: this.goodsInfo.goods_small_logo,
+				goods_state: true
+			}
+			this.addToCart(goods)
 		}
 	}
+}
 </script>
 
 <style lang="scss">
@@ -118,7 +144,7 @@
 			border-left: 1px solid #efefef;
 			font-size: 12px;
 			color: gray;
-			width: 120px;
+			width: 60px;
 		}
 	}
 	&-tip {

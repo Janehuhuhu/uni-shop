@@ -5,13 +5,16 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			};
-		}
+import badgeMix from '@/mixins/tabbar-badge.js'
+export default {
+	mixins: [badgeMix],
+	
+	data() {
+		return {
+			
+		};
 	}
+}
 </script>
 
 <style lang="scss">
