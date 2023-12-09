@@ -7,7 +7,7 @@
 </template>
 
 <script>
-	import { mapMutations } from 'vuex'
+	import { mapMutations, mapState } from 'vuex'
 	export default {
 		name:"my-login",
 		data() {
@@ -15,12 +15,15 @@
 				
 			};
 		},
+		computed: {
+			...mapState('m_user', ['redirectInfo'])
+		},
 		methods: {
-			...mapMutations('m_user', ['updateUserInfo', 'updateToken']),
+			...mapMutations('m_user', ['updateUserInfo', 'updateToken', 'updateRedirectInfo']),
 			getUserInfo(e) {
 				if (e.detail.errMsg === 'getUserInfo:fail auth deny') return uni.$showMsg('您取消了登录授权！')
 				// 存储userinfo
-				this.updateUserInfo(e.detail)
+				this.updateUserInfo(e.detail.userInfo)
 				
 				// 获取登录成功后的token字符串
 				this.getToken(e.detail)
@@ -39,11 +42,23 @@
 				}
 				
 				const { data: loginRes } = await uni.$http.post('/api/public/v1/users/wxlogin', query)
-				console.log('ssaa', loginRes)
+				// console.log('ssaa', loginRes)
 				// 接口访问异常，用假的token数据
 				// if (loginRes.meta.status !== 200) return uni.$showMsg('登录失败')
 				const defaultToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjIzLCJpYXQiOjE1NjQ3MzAwNzksImV4cCI6MTAwMTU2NDczMDA3OH0.YPt-XeLnjV-_1ITaXGY2FhxmCe4NvXuRnRB8OMCfnPo'
 				this.updateToken(loginRes.message?.token || defaultToken)
+				
+				this.navigateBack()
+			},
+			navigateBack() {
+				if (this.redirectInfo && this.redirectInfo.openType === 'switchTab') {
+					uni.switchTab({
+						url: this.redirectInfo.from,
+						complete: () => {
+							this.updateRedirectInfo(null)
+						}
+					})
+				}
 			}
 		}
 	}

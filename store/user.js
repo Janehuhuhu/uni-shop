@@ -4,7 +4,8 @@ export default {
 	state: () => ({
 		address: JSON.parse(uni.getStorageSync('address') || '{}'),
 		token: uni.getStorageSync('token') || '',
-		userinfo: JSON.parse(uni.getStorageSync('userinfo') || '{}')
+		userinfo: JSON.parse(uni.getStorageSync('userinfo') || '{}'),
+		redirectInfo: null,
 	}),
 	
 	mutations: {
@@ -27,8 +28,11 @@ export default {
 			this.commit('m_user/saveTokenToStorage')
 		},
 		saveTokenToStorage(state) {
-			uni.setStorageSync('token', JSON.stringify(state.token))
+			uni.setStorageSync('token', state.token)
 		},
+		updateRedirectInfo(state, info) {
+			state.redirectInfo = info
+		}
 	},
 	
 	getters: {
